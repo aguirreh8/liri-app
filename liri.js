@@ -29,9 +29,9 @@ const myTweets = () => {
 		console.log("**** Now displaying your last 20 tweets *******");
 		console.log('------------------');
 		tweets.forEach((item) => {
-			console.log(item.created_at);
-			console.log(item.text);
-			console.log('------------------');
+			const result = `${item.created_at} \n${item.text} \n---------------`;
+			console.log(result);
+			logToFile(result);
 		});
 	});
 };
@@ -46,10 +46,9 @@ const spotifySearch = song => {
 			}
 
 			console.log("**** Music Information ****")
-			console.log("Artist: " + data.tracks.items[0].album.artists[0].name);
-			console.log("Track: " + data.tracks.items[0].name);
-			console.log("Album: " + data.tracks.items[0].album.name);
-			console.log("Preview: " + data.tracks.items[0].preview_url);
+			const result = `Artist: ${data.tracks.items[0].album.artists[0].name} \nTrack: ${data.tracks.items[0].name} \nAlbum: ${data.tracks.items[0].album.name} \nPreview: ${data.tracks.items[0].preview_url} \n----------------`;
+			console.log(result);
+			logToFile(result);
 		}); 
 	}
 
@@ -60,10 +59,9 @@ const spotifySearch = song => {
 		}
 
 		console.log("**** Music Information ****")
-		console.log("Artist: " + data.tracks.items[0].album.artists[0].name);
-		console.log("Track: " + data.tracks.items[0].name);
-		console.log("Album: " + data.tracks.items[0].album.name);
-		console.log("Preview: " + data.tracks.items[0].preview_url);
+		const result = `Artist: ${data.tracks.items[0].album.artists[0].name} \nTrack: ${data.tracks.items[0].name} \nAlbum: ${data.tracks.items[0].album.name} \nPreview: ${data.tracks.items[0].preview_url} \n---------------`;
+		console.log(result);
+		logToFile(result);
 	}); 
 
 };
@@ -75,9 +73,9 @@ const movieRequest = movie => {
 		request("http://www.omdbapi.com/?t=Mr.+Nobody&y=&plot=short&apikey=trilogy", (error, response, body) => {
 			const movie = JSON.parse(body);
 			console.log("**** Movie Information ****")
-			console.log(
-				`Title: ${movie.Title} \nYear: ${movie.Year} \nIMDB Rating: ${movie.Ratings[0].Value} \nRotten Tomatos Rating: ${movie.Ratings[1].Value} \nCountry of Production: ${movie.Country} \nLanguages: ${movie.Language} \nPlot: ${movie.Plot} \nActors: ${movie.Actors}`)
-			console.log("---------------")
+			const result =`Title: ${movie.Title} \nYear: ${movie.Year} \nIMDB Rating: ${movie.Ratings[0].Value} \nRotten Tomatos Rating: ${movie.Ratings[1].Value} \nCountry of Production: ${movie.Country} \nLanguages: ${movie.Language} \nPlot: ${movie.Plot} \nActors: ${movie.Actors} \n---------------`;
+			console.log(result);
+			logToFile(result);
 		});
 	}
 
@@ -85,13 +83,52 @@ const movieRequest = movie => {
 	request("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy", (error, response, body) => {
 		const movie = JSON.parse(body);
 		console.log("**** Movie Information ****")
-		console.log(
-			`Title: ${movie.Title} \nYear: ${movie.Year} \nIMDB Rating: ${movie.Ratings[0].Value} \nRotten Tomatos Rating: ${movie.Ratings[1].Value} \nCountry of Production: ${movie.Country} \nLanguages: ${movie.Language} \nPlot: ${movie.Plot} \nActors: ${movie.Actors}`)
-		console.log("---------------")
+		const result = `Title: ${movie.Title} \nYear: ${movie.Year} \nIMDB Rating: ${movie.Ratings[0].Value} \nRotten Tomatos Rating: ${movie.Ratings[1].Value} \nCountry of Production: ${movie.Country} \nLanguages: ${movie.Language} \nPlot: ${movie.Plot} \nActors: ${movie.Actors} \n---------------`;
+		console.log(result);
+		logToFile(result);
 	});
 
 };
 
+//Reads random.txt and executes one of the functions that it specifies. Must be a valid function name. Uses fs "file system" module.
+const readFile = () => {
+	fs.readFile("random.txt", "utf8", (error, data) => {
+		if (error) {
+			console.log(error);
+		}
+
+		//splits the text at any commas and inserts each part of the array into variables
+		const textArr = data.split(",");
+		input = textArr[0].trim();
+		query = textArr[1].trim();
+
+		//search if the text in file are valid. Run a function if true.
+		switch (input) {
+			case "my-tweets":
+				myTweets();
+				break;
+			case "spotify-this-song":
+				spotifySearch(query);
+				break;
+			case "movie-this":
+				movieRequest(query);
+				break;
+			default:
+				console.log("This file has no valid requests. Aborting.....");
+		}
+
+	});
+}
+
+const logToFile = result => {
+	fs.appendFile("log.txt", result, (error) => {
+		if (error) {
+			console.log(error);
+		}			
+	})
+};
+
+//Reads the user's input from the terminal and run a function if valid.
 switch (input) {
 	case "my-tweets":
 		myTweets();
@@ -102,6 +139,9 @@ switch (input) {
 	case "movie-this":
 		movieRequest(query);
 		break;
+	case "do-what-it-says":
+		readFile();
+		break
 	default:
 		console.log("Not a valid request. Please type 'my-tweets', 'spotify-this-song', 'movie-this' or 'do-what-it-says'.");
 }
