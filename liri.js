@@ -29,7 +29,10 @@ const myTweets = () => {
 		console.log("**** Now displaying your last 20 tweets *******");
 		console.log('------------------');
 		tweets.forEach((item) => {
-			const result = `${item.created_at} \n${item.text} \n---------------`;
+			const result = 
+				`${item.created_at} 
+				\n${item.text}
+				\n---------------`;
 			console.log(result);
 			logToFile(result);
 		});
@@ -46,10 +49,16 @@ const spotifySearch = song => {
 			}
 
 			console.log("**** Music Information ****")
-			const result = `Artist: ${data.tracks.items[0].album.artists[0].name} \nTrack: ${data.tracks.items[0].name} \nAlbum: ${data.tracks.items[0].album.name} \nPreview: ${data.tracks.items[0].preview_url} \n----------------`;
+			const result = 
+				`Artist: ${data.tracks.items[0].album.artists[0].name} 
+				\nTrack: ${data.tracks.items[0].name} 
+				\nAlbum: ${data.tracks.items[0].album.name} 
+				\nPreview: ${data.tracks.items[0].preview_url} 
+				\n----------------`;
 			console.log(result);
 			logToFile(result);
-		}); 
+		});
+		return; 
 	}
 
 	//Run a search on Spotify API to find best match of query. Uses node-spotify-api package module
@@ -59,7 +68,12 @@ const spotifySearch = song => {
 		}
 
 		console.log("**** Music Information ****")
-		const result = `Artist: ${data.tracks.items[0].album.artists[0].name} \nTrack: ${data.tracks.items[0].name} \nAlbum: ${data.tracks.items[0].album.name} \nPreview: ${data.tracks.items[0].preview_url} \n---------------`;
+		const result = 
+			`Artist: ${data.tracks.items[0].album.artists[0].name} 
+			\nTrack: ${data.tracks.items[0].name} 
+			\nAlbum: ${data.tracks.items[0].album.name} 
+			\nPreview: ${data.tracks.items[0].preview_url}
+			\n---------------`;
 		console.log(result);
 		logToFile(result);
 	}); 
@@ -73,18 +87,37 @@ const movieRequest = movie => {
 		request("http://www.omdbapi.com/?t=Mr.+Nobody&y=&plot=short&apikey=trilogy", (error, response, body) => {
 			const movie = JSON.parse(body);
 			console.log("**** Movie Information ****")
-			const result =`Title: ${movie.Title} \nYear: ${movie.Year} \nIMDB Rating: ${movie.Ratings[0].Value} \nRotten Tomatos Rating: ${movie.Ratings[1].Value} \nCountry of Production: ${movie.Country} \nLanguages: ${movie.Language} \nPlot: ${movie.Plot} \nActors: ${movie.Actors} \n---------------`;
-			console.log(result);
+			const result =
+				`Title: ${movie.Title} 
+				\nYear: ${movie.Year} 
+				\nIMDB Rating: ${movie.Ratings[0].Value} 
+				\nRotten Tomatos Rating: ${movie.Ratings[1].Value} 
+				\nCountry of Production: ${movie.Country} 
+				\nLanguages: ${movie.Language} 
+				\nPlot: ${movie.Plot} 
+				\nActors: ${movie.Actors} 
+				\n---------------`;
+			console.log(result.trim());
 			logToFile(result);
 		});
+		return;
 	}
 
 	//Run a search on OMDB API to find best match of query. Uses 'request' package module
 	request("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy", (error, response, body) => {
 		const movie = JSON.parse(body);
 		console.log("**** Movie Information ****")
-		const result = `Title: ${movie.Title} \nYear: ${movie.Year} \nIMDB Rating: ${movie.Ratings[0].Value} \nRotten Tomatos Rating: ${movie.Ratings[1].Value} \nCountry of Production: ${movie.Country} \nLanguages: ${movie.Language} \nPlot: ${movie.Plot} \nActors: ${movie.Actors} \n---------------`;
-		console.log(result);
+		const result = 
+			`Title: ${movie.Title} 
+			\nYear: ${movie.Year} 
+			\nIMDB Rating: ${movie.Ratings[0].Value} 
+			\nRotten Tomatos Rating: ${movie.Ratings[1].Value} 
+			\nCountry of Production: ${movie.Country} 
+			\nLanguages: ${movie.Language} 
+			\nPlot: ${movie.Plot} 
+			\nActors: ${movie.Actors} 
+			\n---------------`;
+		console.log(result.trim());
 		logToFile(result);
 	});
 
